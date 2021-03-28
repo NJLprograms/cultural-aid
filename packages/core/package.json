@@ -1,0 +1,17 @@
+{
+  "name": "@cultural-aid/core",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "firebase": "^8.3.1",
+    "react-redux": "^7.2.3",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-observable": "^1.2.0",
+    "rxjs": "^6.6.6"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
+}

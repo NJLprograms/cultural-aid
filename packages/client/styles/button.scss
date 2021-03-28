@@ -1,0 +1,27 @@
+.button {
+  display: block;
+  position: relative;
+  height: 50px;
+  border-radius: 25px;
+  background: var(--secondary-gradient);
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 1s ease-in-out !important;
+
+  &:hover {
+    background: var(--theme-color);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+button {
+  outline: none;
+}

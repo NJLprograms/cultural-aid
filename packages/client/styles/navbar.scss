@@ -1,0 +1,27 @@
+@import './variables/viewport.scss';
+
+.navbar {
+  background-image: var(--secondary-gradient);
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 10px;
+}
+
+@media only screen and (min-width: $desktop-viewport) {
+  .navbar {
+    height: 60px;
+  }
+}
+
+@media only screen and (min-width: $mobile-viewport) {
+  .navbar {
+    height: 80px;
+  }
+}
+
+@media only screen and (max-width: $mobile-viewport) {
+  .navbar {
+    height: 100px;
+  }
+}

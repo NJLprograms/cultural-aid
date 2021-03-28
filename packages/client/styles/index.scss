@@ -1,0 +1,36 @@
+@import 'input.scss';
+@import 'glassmorphism.scss';
+@import 'navbar.scss';
+@import 'button.scss';
+@import 'image-box.scss';
+
+html,
+body,
+#__next {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  --theme-color: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
+  --secondary-gradient: linear-gradient(40deg, #ff6ec4, #7873f5);
+}
+
+#background {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  background-image: var(--theme-color);
+  clip-path: polygon(
+    100% 50%,
+    100% 0px,
+    100% 100%,
+    30% 75%,
+    0px 65%,
+    0px 150px
+  );
+  z-index: -999999999;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
