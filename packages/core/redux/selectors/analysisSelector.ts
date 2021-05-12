@@ -1,5 +1,7 @@
 import { AppState } from '../';
-import { ILoadingState } from '@cultural-aid/types/loader-state';
+import { IDetailedLoadingState } from '@cultural-aid/types/loader-state';
+import { ImageAnalysisResults } from '@cultural-aid/types';
 
-export const analysisSelector = (state: AppState): ILoadingState<any> =>
-  state.analysis;
+export const analysisSelector = (
+  state: AppState
+): IDetailedLoadingState<ImageAnalysisResults> => state.analysis;

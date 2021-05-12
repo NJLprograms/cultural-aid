@@ -5,6 +5,7 @@ export const SIGN_UP_SUCCESS = '[User] Sign Up Success';
 export const LOGOUT_SUCCESS = '[User] Logout Success';
 
 export const PROCESS_STATE_LOGIN = '[User] Login Processing';
+export const PROCESS_STATE_GOOGLE_SIGN_IN = '[User] Google Sign In Processing';
 export const PROCESS_STATE_SIGN_UP = '[User] Sign Up Processing';
 export const PROCESS_STATE_LOGOUT = '[User] Logout Processing';
 
@@ -40,6 +41,10 @@ export class UserLogoutSuccess {
 export class ProcessUserLoginAction {
   readonly type = PROCESS_STATE_LOGIN;
   constructor(readonly payload: UserCredentials) {}
+}
+
+export class ProcessGoogleSignInAction {
+  readonly type = PROCESS_STATE_GOOGLE_SIGN_IN;
 }
 
 export class ProcessUserLogoutAction {
@@ -80,6 +85,7 @@ export type UserActions =
   | UserSignUpSuccess
   | UserLogoutSuccess
   | ProcessUserLoginAction
+  | ProcessGoogleSignInAction
   | ProcessUserLogoutAction
   | ProcessUserSignUpAction
   | LoginErrorAction

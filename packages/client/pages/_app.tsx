@@ -5,6 +5,7 @@ import { configureEpic, store } from '@cultural-aid/core/redux';
 
 import type { AppProps } from 'next/dist/next-server/lib/router/router';
 import { ChakraProvider } from '@chakra-ui/react';
+import { FirebaseService } from '@cultural-aid/core/services';
 import { MainLayout } from 'layouts/MainLayout';
 import { Provider } from 'react-redux';
 import theme from 'utils/theme';
@@ -12,6 +13,11 @@ import theme from 'utils/theme';
 const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     configureEpic();
+    const { unsubscribe } = FirebaseService.Authentication.LoadUserSession();
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (

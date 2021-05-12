@@ -3,6 +3,7 @@ import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
+  PROCESS_STATE_GOOGLE_SIGN_IN,
   PROCESS_STATE_LOGIN,
   PROCESS_STATE_LOGOUT,
   PROCESS_STATE_SIGN_UP,
@@ -27,7 +28,10 @@ export const user = (
     case LOGOUT_SUCCESS: {
       return { ...state, loading: false, value: null };
     }
-    case PROCESS_STATE_LOGIN || PROCESS_STATE_LOGOUT || PROCESS_STATE_SIGN_UP: {
+    case PROCESS_STATE_LOGIN ||
+      PROCESS_STATE_GOOGLE_SIGN_IN ||
+      PROCESS_STATE_LOGOUT ||
+      PROCESS_STATE_SIGN_UP: {
       return { ...state, loading: true, error: null };
     }
     case LOGIN_ERROR || SIGN_UP_ERROR: {

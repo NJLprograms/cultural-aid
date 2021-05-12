@@ -3,6 +3,7 @@ import {
   RESET_PASSWORD_ERROR,
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
+  RESET_PROCESS_STATE,
 } from '@cultural-aid/core/redux/actions/process';
 
 import { ProcessState } from '@cultural-aid/types/process';
@@ -30,6 +31,10 @@ export const process = (
         ...state,
         RESET: { ...state.RESET, loading: false, error: action.payload },
       };
+    }
+
+    case RESET_PROCESS_STATE: {
+      return { ...initialState };
     }
     default:
       return state;

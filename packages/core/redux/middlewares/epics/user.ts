@@ -2,9 +2,11 @@ import { Epic, StateObservable, combineEpics, ofType } from 'redux-observable';
 import {
   LoginErrorAction,
   LogoutErrorAction,
+  PROCESS_STATE_GOOGLE_SIGN_IN,
   PROCESS_STATE_LOGIN,
   PROCESS_STATE_LOGOUT,
   PROCESS_STATE_SIGN_UP,
+  ProcessGoogleSignInAction,
   ProcessUserLoginAction,
   ProcessUserLogoutAction,
   ProcessUserSignUpAction,
@@ -14,9 +16,18 @@ import {
   UserSignUpSuccess,
 } from '@cultural-aid/core/redux/actions/user';
 import { Observable, from, of } from 'rxjs';
-import { catchError, map, pluck, switchMap } from 'rxjs/operators';
+import {
+  catchError,
+  map,
+  mergeMap,
+  pluck,
+  switchAll,
+  switchMap,
+} from 'rxjs/operators';
 
 import { AppState } from '@cultural-aid/core/redux';
+import { ImageAnalysisStateResetAction } from '../../actions/analysis';
+import { ResetProcessStateAction } from '../../actions/process';
 import type { User } from '@cultural-aid/types/user';
 import { firebase } from '@cultural-aid/core/firebase';
 
@@ -81,9 +92,15 @@ const userLogoutEpic = (
 ) =>
   action$.pipe(
     ofType(PROCESS_STATE_LOGOUT),
-    switchMap((action: ProcessUserLogoutAction) =>
+    switchMap((_action: ProcessUserLogoutAction) =>
       from(firebase.auth().signOut()).pipe(
-        map(() => new UserLogoutSuccess()),
+        mergeMap(() =>
+          of([
+            new UserLogoutSuccess(),
+            new ResetProcessStateAction(),
+            new ImageAnalysisStateResetAction(),
+          ]).pipe(switchAll())
+        ),
         catchError(
           (error: Error): Observable<LogoutErrorAction> =>
             of(new LogoutErrorAction(error))
@@ -92,8 +109,28 @@ const userLogoutEpic = (
     )
   );
 
+const googleSignInEpic = (
+  action$: Observable<ProcessGoogleSignInAction>,
+  _store$: StateObservable<AppState>
+) =>
+  action$.pipe(
+    ofType(PROCESS_STATE_GOOGLE_SIGN_IN),
+    switchMap((_action: ProcessGoogleSignInAction) =>
+      from(
+        firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      ).pipe(
+        map(
+          ({ user }: firebase.default.auth.UserCredential) =>
+            new UserLoginSuccess(user)
+        ),
+        catchError((error) => of(new LoginErrorAction(error)))
+      )
+    )
+  );
+
 export const userEpic = combineEpics(
   userLoginEpic,
   userSignUpEpic,
-  userLogoutEpic
+  userLogoutEpic,
+  googleSignInEpic
 );

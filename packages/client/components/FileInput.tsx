@@ -31,25 +31,24 @@ export const FileInput = ({ ...props }) => {
         {...props}
       >
         {file ? (
-          <Fade in>
-            <Text
-              w='100%'
-              height='100px'
-              maxH='100px'
-              bgGradient='var(--secondary-gradient)'
-              bgClip='text'
-              fontSize={['xl', '2xl']}
-              fontWeight='extrabold'
-              textShadow='2px 2px 1px rgba(0,0,0,0.1)'
-              display='flex'
-              justifyContent='center'
-              overflow='wrap'
-              textOverflow='ellipsis'
-              textAlign={['center', 'left']}
-            >
-              {file.name}
-            </Text>
-          </Fade>
+          <Box m='3' borderRadius='10px' bg='#1a202c'>
+            <Fade in>
+              <Text
+                bgGradient='var(--secondary-gradient)'
+                bgClip='text'
+                fontSize={['xl', '2xl']}
+                fontWeight='extrabold'
+                textShadow='2px 2px 1px rgba(0,0,0,0.1)'
+                display='flex'
+                justifyContent='center'
+                overflow='wrap'
+                textOverflow='ellipsis'
+                textAlign={['center', 'left']}
+              >
+                {file.name}
+              </Text>
+            </Fade>
+          </Box>
         ) : (
           <Box height='100px'></Box>
         )}
@@ -98,7 +97,7 @@ export const FileInput = ({ ...props }) => {
             <button
               className='button'
               style={{ marginTop: '5px', width: '100%' }}
-              onClick={() => ImageAnalysisService.analyzeImageFile(file)}
+              onClick={() => ImageAnalysisService.AnalyzeImageFile(file)}
             >
               Analyze
             </button>

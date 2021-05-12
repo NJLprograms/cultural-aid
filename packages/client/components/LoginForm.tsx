@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Flex,
   FormControl,
   FormLabel,
@@ -8,11 +9,13 @@ import {
   InputGroup,
   InputRightElement,
   Spinner,
+  Text,
 } from '@chakra-ui/react';
+import { FirebaseService, UserService } from '@cultural-aid/core/services';
 import React, { useState } from 'react';
 
+import GoogleButton from 'react-google-button';
 import Link from 'next/link';
-import { UserService } from '@cultural-aid/core/services';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@cultural-aid/core/redux/selectors/userSelector';
 
@@ -24,7 +27,18 @@ export const LoginForm = () => {
   const [password, setPassword] = useState<string>('');
 
   return (
-    <Flex height='100%' justifyContent='center' alignItems='center'>
+    <Flex
+      flexDir='column'
+      justifyContent='center'
+      alignItems='center'
+      height='100%'
+    >
+      <GoogleButton
+        onClick={() => FirebaseService.Authentication.GoogleSignIn()}
+        disabled={loading}
+      />
+      <Text mt='5'>Or</Text>
+      <Divider colorScheme='black' mb='3' />
       <Box
         as='form'
         w={['80%', '60%']}
@@ -51,7 +65,6 @@ export const LoginForm = () => {
             disabled={loading}
           />
         </FormControl>
-
         <FormControl>
           <FormLabel htmlFor='password'>Password</FormLabel>
           <InputGroup>
@@ -74,12 +87,10 @@ export const LoginForm = () => {
             </InputRightElement>
           </InputGroup>
         </FormControl>
-
         <Flex flexDir='column'>
           <Link href='/register'>Don't have an account?</Link>
           <Link href='/forgot'>Forgot Your Password?</Link>
         </Flex>
-
         <Button
           type='submit'
           w='100%'

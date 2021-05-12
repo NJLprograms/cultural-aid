@@ -3,6 +3,7 @@ export const RESET_PASSWORD_SUCCESS =
   '[Process] Reset Password Email Request Successful';
 export const RESET_PASSWORD_ERROR =
   '[Process] Reset Password Email Request Error';
+export const RESET_PROCESS_STATE = '[Process] Reset State';
 
 export class ResetPasswordRequestAction {
   readonly type = RESET_PASSWORD_REQUEST;
@@ -18,7 +19,12 @@ export class ResetPasswordErrorAction {
   constructor(readonly payload: Error) {}
 }
 
+export class ResetProcessStateAction {
+  readonly type = RESET_PROCESS_STATE;
+}
+
 export type ProcessActions =
   | ResetPasswordSuccessAction
   | ResetPasswordErrorAction
-  | ResetPasswordRequestAction;
+  | ResetPasswordRequestAction
+  | ResetProcessStateAction;

@@ -1,4 +1,8 @@
 import { Collections, UserSubcollection } from '@cultural-aid/types/firestore';
+import type {
+  ImageAnalysisResults,
+  VisionWebDetectionResponse,
+} from '@cultural-aid/types';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
 import { ImageAnnotatorClient } from '@google-cloud/vision';
@@ -13,9 +17,23 @@ const GCPVision = new ImageAnnotatorClient({
 
 const processFile: NextApiHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ImageAnalysisResults>
 ) => {
   const { bucketObject, userId } = req.body;
+
+  const documentPayload = {
+    ...bucketObject,
+    timeCreated: firebase.firestore.Timestamp.fromMillis(
+      bucketObject.timeCreated
+    ),
+    updated: firebase.firestore.Timestamp.fromMillis(bucketObject.updated),
+  };
+
+  const userUploadsSubcollection = firebase
+    .firestore()
+    .collection(Collections.Users)
+    .doc(userId)
+    .collection(UserSubcollection.Uploads);
 
   const request = {
     image: {
@@ -31,25 +49,15 @@ const processFile: NextApiHandler = async (
   };
 
   try {
-    const [, [results]] = await Promise.all([
-      firebase
-        .firestore()
-        .collection(Collections.Users)
-        .doc(userId)
-        .collection(UserSubcollection.Uploads)
-        .add({
-          ...bucketObject,
-          timeCreated: firebase.firestore.Timestamp.fromMillis(
-            bucketObject.timeCreated
-          ),
-          updated: firebase.firestore.Timestamp.fromMillis(
-            bucketObject.updated
-          ),
-        }),
-      GCPVision.webDetection(request),
-    ]);
+    const [{ webDetection }]: [
+      VisionWebDetectionResponse
+    ] = await GCPVision.webDetection(request);
 
-    res.status(200).send(results.webDetection);
+    await userUploadsSubcollection.add({ ...documentPayload, webDetection });
+
+    process.env.NODE_ENV !== 'production' && console.log(webDetection);
+
+    res.status(200).send(webDetection);
   } catch (error) {
     res.status(400).send({ ...error });
   }

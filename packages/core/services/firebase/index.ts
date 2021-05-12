@@ -1,5 +1,15 @@
+import {
+  ProcessGoogleSignInAction,
+  UserDetectedAction,
+} from '../../redux/actions/user';
+
 import { BucketPutResult } from '@cultural-aid/types/storage';
+import { Subscription } from 'rxjs';
+import { User } from '@cultural-aid/types';
+import { authState } from 'rxfire/auth';
+import { filter } from 'rxjs/operators';
 import { firebase } from '@cultural-aid/core/firebase';
+import { store } from '../../redux';
 
 export namespace FirebaseService {
   export class Storage {
@@ -30,6 +40,22 @@ export namespace FirebaseService {
         timeCreated: Date.parse(metadata.timeCreated),
         updated: Date.parse(metadata.updated),
       };
+    }
+  }
+
+  export class Authentication {
+    static GoogleSignIn() {
+      store.dispatch(new ProcessGoogleSignInAction());
+    }
+
+    static LoadUserSession(): Subscription {
+      return authState(firebase.auth())
+        .pipe<User>(filter<User>((user: User): boolean => !!user))
+        .subscribe((user: User) => {
+          store.dispatch<UserDetectedAction>(
+            new UserDetectedAction({ ...(user.toJSON() as User) })
+          );
+        });
     }
   }
 }
